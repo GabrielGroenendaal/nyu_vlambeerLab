@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // MAZE PROC GEN LAB
 // all students: complete steps 1-6, as listed in this file
@@ -18,9 +20,46 @@ public class Pathmaker : MonoBehaviour {
 //	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
 //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
 //	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
+	private int counter;
+	public Transform floorPrefab;
+	public Transform pathmakerSpherePrefab;
 
 
-	void Update () {
+	private void Start()
+	{
+		counter = 0;
+	}
+
+	void FixedUpdate () {
+		if (counter < 50)
+		{
+			float r = Random.Range(0.0f, 1.0f);
+			
+			if (r < 0.25f)
+			{
+				transform.Rotate(0f,90f,0f);
+			}
+			
+			else if (r >= 0.25f && r <= .5f)
+			{
+				transform.Rotate(0f, -90f, 0f);
+			}
+			
+			else if (r >= 0.99f && r <= 1.0f)
+			{
+				Instantiate(pathmakerSpherePrefab, transform);
+			}
+			
+			Instantiate(floorPrefab, transform.position, Quaternion.identity);
+			transform.Translate(0,0,1f);
+			counter++;
+		}
+
+		else
+		{
+			Destroy(this);
+		}
+		
 //		If counter is less than 50, then:
 //			Generate a random number from 0.0f to 1.0f;
 //			If random number is less than 0.25f, then rotate myself 90 degrees;
